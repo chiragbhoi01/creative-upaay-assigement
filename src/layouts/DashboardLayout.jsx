@@ -3,11 +3,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import { DragDropContext } from '@hello-pangea/dnd';
 import { moveTask } from '../features/tasksSlice';
 import Column from '../components/Column';
-import { Search, Bell, ChevronDown, Settings, LogOut, MoreHorizontal, Home, Columns, Plus } from 'lucide-react';
 import AddTaskModal from '../components/AddTaskModal';
 import TaskDetailsModal from '../components/TaskDetailsModal';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { Search, Bell, ChevronDown, Settings, LogOut, MoreHorizontal, Home, Columns, Plus, Filter, Users, Calendar } from 'lucide-react';
 
 const Sidebar = () => {
     const { logout } = useAuth();
@@ -60,10 +60,13 @@ const Sidebar = () => {
 
 const DashboardLayout = () => {
     const { user } = useAuth();
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const { tasks, columns, columnOrder } = useSelector((state) => state.tasks);
     const dispatch = useDispatch();
+    const { tasks, columns, columnOrder } = useSelector((state) => state.tasks);
+    
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedTaskId, setSelectedTaskId] = useState(null);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [filterPriority, setFilterPriority] = useState('All');
 
     const onDragEnd = (result) => {
         const { destination, source, draggableId } = result;
@@ -73,9 +76,16 @@ const DashboardLayout = () => {
         dispatch(moveTask({ source, destination, draggableId }));
     };
 
-    const getTasksByColumn = (columnId) => {
+    const getFilteredTasks = (columnId) => {
         const column = columns[columnId];
-        return column.taskIds.map(taskId => tasks[taskId]).filter(Boolean);
+        return column.taskIds
+            .map(taskId => tasks[taskId])
+            .filter(task => {
+                if (!task) return false;
+                const matchesSearch = task.title.toLowerCase().includes(searchQuery.toLowerCase());
+                const matchesPriority = filterPriority === 'All' || task.priority === filterPriority;
+                return matchesSearch && matchesPriority;
+            });
     };
 
     const openAddTaskModal = () => setIsModalOpen(true);
@@ -86,32 +96,44 @@ const DashboardLayout = () => {
             <main className="flex-1 flex flex-col h-full">
                 <header className="flex items-center justify-between p-6 bg-white border-b border-gray-100">
                     <div className="flex items-center gap-4">
-                        <h1 className="text-xl font-semibold text-gray-800">Mobile App</h1>
-                        <button
+                        <h1 className="text-2xl font-bold text-gray-800">Mobile App</h1>
+                    </div>
+                    <div className="flex items-center gap-3">
+                         <div className="relative">
+                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                            <input
+                                type="text"
+                                placeholder="Search..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                className="pl-9 pr-3 py-2 w-48 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-purple-500"
+                            />
+                        </div>
+                        <div className="relative">
+                            <select
+                                value={filterPriority}
+                                onChange={(e) => setFilterPriority(e.target.value)}
+                                className="appearance-none pl-9 pr-8 py-2 border border-gray-200 rounded-lg bg-white text-sm focus:outline-none focus:ring-1 focus:ring-purple-500 cursor-pointer"
+                            >
+                                <option value="All">All Priorities</option>
+                                <option value="High">High</option>
+                                <option value="Medium">Medium</option>
+                                <option value="Low">Low</option>
+                            </select>
+                            <Filter className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
+                        </div>
+                        <button className="flex items-center gap-2 text-sm text-gray-600 border border-gray-200 px-3 py-2 rounded-lg hover:bg-gray-50">
+                            <Calendar size={16} /> Today
+                        </button>
+                        <button className="flex items-center gap-2 text-sm text-gray-600 border border-gray-200 px-3 py-2 rounded-lg hover:bg-gray-50">
+                            <Users size={16} /> Share
+                        </button>
+                         <button
                             onClick={openAddTaskModal}
-                            className="flex items-center gap-2 bg-[#5030E5] text-white px-3 py-1.5 rounded-lg hover:bg-[#4026B3] transition-colors text-sm font-medium"
+                            className="flex items-center gap-2 bg-[#5030E5] text-white px-3 py-2 rounded-lg hover:bg-[#4026B3] transition-colors text-sm font-semibold"
                         >
                             <Plus size={18} />
-                            Add New
                         </button>
-                    </div>
-                    <div className="flex items-center gap-4">
-                        <button className="text-gray-500 hover:text-gray-800">
-                            <Search size={22} />
-                        </button>
-                        <button className="text-gray-500 hover:text-gray-800">
-                            <Bell size={22} />
-                        </button>
-                        <div className="flex items-center gap-2">
-                            <img src="https://i.pravatar.cc/150?u=a042581f4e29026704d" alt="User" className="w-8 h-8 rounded-full" />
-                            <div>
-                                <h4 className="font-semibold text-sm text-gray-700">{user?.name || 'User'}</h4>
-                                <p className='text-xs text-gray-500'>UX Designer</p>
-                            </div>
-                            <button className="text-gray-500">
-                                <ChevronDown size={20} />
-                            </button>
-                        </div>
                     </div>
                 </header>
                 <div className="flex-1 overflow-x-auto p-6">
@@ -121,7 +143,7 @@ const DashboardLayout = () => {
                                 <Column
                                     key={columnId}
                                     column={columns[columnId]}
-                                    tasks={getTasksByColumn(columnId)}
+                                    tasks={getFilteredTasks(columnId)}
                                     setSelectedTaskId={setSelectedTaskId}
                                     openAddTaskModal={openAddTaskModal}
                                 />
