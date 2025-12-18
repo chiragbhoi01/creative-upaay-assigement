@@ -6,12 +6,10 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import DashboardLayout from './layouts/DashboardLayout';
 import LoginPage from './pages/Login';
 
-// A co-located ProtectedRoute component for route protection
 const ProtectedRoute = ({ children }) => {
   const { user } = useAuth();
   
   if (!user) {
-    // If there is no authenticated user, redirect to the login page
     return <Navigate to="/login" replace />;
   }
 
@@ -26,7 +24,7 @@ function App() {
           <Routes>
             <Route path="/login" element={<LoginPage />} />
             <Route
-              path="/*" // Match all other routes
+              path="/*"
               element={
                 <ProtectedRoute>
                   <DashboardLayout />

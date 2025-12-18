@@ -1,7 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { v4 as uuidv4 } from 'uuid'; // Make sure to npm install uuid
+import { v4 as uuidv4 } from 'uuid';
 
-// Initial Helper: Load from Local Storage
 const loadState = () => {
     try {
         const serializedState = localStorage.getItem('kanbanState');

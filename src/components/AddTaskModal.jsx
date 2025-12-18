@@ -9,7 +9,7 @@ const AddTaskModal = ({ isOpen, onClose }) => {
     title: '',
     description: '',
     priority: 'Low',
-    dueDate: '' // Level 2: Due Date Field
+    dueDate: ''
   });
 
   if (!isOpen) return null;
@@ -20,7 +20,6 @@ const AddTaskModal = ({ isOpen, onClose }) => {
 
     dispatch(addTask(formData));
     
-    // Reset and Close
     setFormData({ title: '', description: '', priority: 'Low', dueDate: '' });
     onClose();
   };
@@ -29,7 +28,6 @@ const AddTaskModal = ({ isOpen, onClose }) => {
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
       <div className="bg-white rounded-xl shadow-xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-200">
         
-        {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
           <h2 className="text-lg font-bold text-gray-900">Create New Task</h2>
           <button onClick={onClose} className="text-gray-400 hover:text-gray-600 transition-colors">
@@ -37,7 +35,6 @@ const AddTaskModal = ({ isOpen, onClose }) => {
           </button>
         </div>
 
-        {/* Form */}
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Task Title</label>

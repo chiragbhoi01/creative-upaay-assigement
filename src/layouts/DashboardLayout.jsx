@@ -134,6 +134,19 @@ const DashboardLayout = () => {
                         >
                             <Plus size={18} />
                         </button>
+                        <div className="flex items-center gap-3 border-l border-gray-200 pl-4 ml-2">
+                            <div className="text-right">
+                                <p className="text-sm font-semibold text-gray-800 truncate max-w-[120px]">
+                                    {user.displayName || 'Anonymous User'}
+                                </p>
+                                <p className="text-xs text-gray-500 truncate max-w-[120px]">{user.email}</p>
+                            </div>
+                            <img
+                                className="h-10 w-10 rounded-full object-cover"
+                                src={`https://api.dicebear.com/7.x/initials/svg?seed=${user.email}`}
+                                alt="User avatar"
+                            />
+                        </div>
                     </div>
                 </header>
                 <div className="flex-1 overflow-x-auto p-6">

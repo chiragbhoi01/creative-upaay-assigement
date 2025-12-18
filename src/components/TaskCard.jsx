@@ -2,7 +2,6 @@ import React from 'react';
 import { Draggable } from '@hello-pangea/dnd';
 import { MessageSquare, Folder } from 'lucide-react';
 
-// Dummy avatar images
 const avatar1 = "https://i.pravatar.cc/150?img=1";
 const avatar2 = "https://i.pravatar.cc/150?img=2";
 const avatar3 = "https://i.pravatar.cc/150?img=3";

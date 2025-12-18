@@ -13,7 +13,7 @@ const LoginPage = () => {
 
   const handleAuthAction = async (e) => {
     e.preventDefault();
-    setError(''); // Clear previous errors
+    setError('');
 
     try {
       if (isSigningUp) {
@@ -23,7 +23,6 @@ const LoginPage = () => {
       }
       navigate('/', { replace: true });
     } catch (err) {
-      // Map Firebase error codes to user-friendly messages
       switch (err.code) {
         case 'auth/invalid-email':
           setError('Please enter a valid email address.');
@@ -113,7 +112,7 @@ const LoginPage = () => {
           <button
             onClick={() => {
               setIsSigningUp(!isSigningUp);
-              setError(''); // Clear errors on toggle
+              setError('');
             }}
             className="ml-1.5 font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:underline"
           >

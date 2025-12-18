@@ -5,7 +5,7 @@ import {
   createUserWithEmailAndPassword,
   signOut,
 } from 'firebase/auth';
-import { auth } from '../firebase'; // Import the auth instance
+import { auth } from '../firebase';
 
 const AuthContext = createContext();
 
@@ -18,24 +18,20 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       if (currentUser) {
-        // User is signed in.
         const userPayload = {
           uid: currentUser.uid,
           email: currentUser.email,
           displayName: currentUser.displayName,
         };
         setUser(userPayload);
-        // Persist to localStorage as per requirement
         localStorage.setItem('task_user', JSON.stringify(userPayload));
       } else {
-        // User is signed out.
         setUser(null);
         localStorage.removeItem('task_user');
       }
       setLoading(false);
     });
 
-    // Cleanup subscription on unmount
     return () => unsubscribe();
   }, []);
 
@@ -58,7 +54,6 @@ export const AuthProvider = ({ children }) => {
     logout,
   };
 
-  // Render children only when not loading to prevent route flickering
   return (
     <AuthContext.Provider value={value}>
       {!loading && children}
