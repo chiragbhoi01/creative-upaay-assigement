@@ -3,8 +3,7 @@
 A robust, production-ready Kanban Dashboard designed for efficient task management. Built with **React (Vite)**, **Redux Toolkit**, and **Firebase**, adhering to strict performance and design standards.
 
 🔗 **Live Demo:** https://creative-upaay.web.app/
-🎥 **Video Walkthrough:** https://drive.google.com/drive/folders/12p0s4eiwWw7URcjtiGUAFmqZx6hAJynM
-
+🎥 **Video Walkthrough:** https://drive.google.com/file/d/10XbJiKDVu1lJMZjGq7NNdENngnU1-XfF/view?usp=drive_link
 ---
 
 ## 🎯 Project Overview
